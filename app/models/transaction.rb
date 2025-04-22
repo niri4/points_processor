@@ -1,3 +1,4 @@
 class Transaction < ApplicationRecord
-  enum :status, [:ok, :not_found]
+  validates :transaction_id, presence: true
+  validates :user_id, presence: true
 end

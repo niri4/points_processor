@@ -52,3 +52,5 @@ group :development do
 end
 
 
+
+gem "httparty", "~> 0.23.1"
