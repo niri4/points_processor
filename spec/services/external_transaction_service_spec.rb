@@ -3,67 +3,63 @@ require 'rails_helper'
 require 'webmock/rspec'
 
 RSpec.describe ExternalTransactionService do
-  describe ".fetch_transaction" do
+  describe ".process_transaction" do
     it "returns parsed transaction data" do
-      stub_request(:get, "http://points-processor.free.beeceptor.com/transactions/abc123")
-        .to_return(body: {
-          transaction_id: 'abc123',
-          points: 50,
-          user_id: 'user_1',
-        }.to_json, headers: { 'Content-Type' => 'application/json' })
+      transaction = { transaction_id: 'abc123', points: 50, user_id: 'user_1' }
+      stub_request(:post, "http://points-processor.free.beeceptor.com/transactions")
+        .to_return(body: transaction.to_json, headers: { 'Content-Type' => 'application/json' })
 
-      result = ExternalTransactionService.fetch_transaction("abc123")
+      result = ExternalTransactionService.process_transaction(transaction)
 
       expect(result).to eq({
         transaction_id: 'abc123',
         points: 50,
-        user_id: 'user_1'
+        user_id: 'user_1',
+        status: :success
       })
     end
 
     it "returns error parsed transaction data" do
-      stub_request(:get, "http://points-processor.free.beeceptor.com/transactions/invalid")
+      transaction = { transaction_id: 'abc123', points: 50, user_id: 'user_1' }
+      stub_request(:post, "http://points-processor.free.beeceptor.com/transactions")
         .to_return(body: '', headers: { 'Content-Type' => 'application/json' }, status: :bad_request)
 
-      result = ExternalTransactionService.fetch_transaction("invalid")
+      result = ExternalTransactionService.process_transaction(transaction)
+      transaction[:status] =:failed
 
-      expect(result).to eq({
-        transaction_id: "invalid",
-        points: 0,
-        user_id: nil
-      })
+      expect(result).to eq(transaction)
     end
   end
 
-  describe ".fetch_bulk" do
+  describe ".bulk_process" do
     it "returns parsed transaction data" do
-      stub_request(:get, "http://points-processor.free.beeceptor.com/transactions/bulk")
+      stub_request(:post, "http://points-processor.free.beeceptor.com/transactions/bulk_process")
         .to_return(body: { transactions: [{
           transaction_id: 'abc123',
           points: 50,
           user_id: 'user_1',
         }]}.to_json, headers: { 'Content-Type' => 'application/json' })
 
-      result = ExternalTransactionService.fetch_bulk
+      result = ExternalTransactionService.bulk_process([{
+          transaction_id: 'abc123',
+          points: 50,
+          user_id: 'user_1',
+        }])
 
-      expect(result).to eq([{
-        transaction_id: 'abc123',
-        points: 50,
-        user_id: 'user_1'
-      }].as_json)
+      expect(result).to eq([{points: 50, status: :success, transaction_id: "abc123", user_id: "user_1"}])
     end
 
     it "returns error parsed transaction data" do
-      stub_request(:get, "http://points-processor.free.beeceptor.com/transactions/bulk")
+      stub_request(:post, "http://points-processor.free.beeceptor.com/transactions/bulk_process")
         .to_return(body: '', headers: { 'Content-Type' => 'application/json' }, status: :bad_request)
 
-      result = ExternalTransactionService.fetch_bulk
+      result = ExternalTransactionService.bulk_process([{
+          transaction_id: 'abc123',
+          points: 50,
+          user_id: 'user_1',
+        }])
 
-      expect(result).to eq([{
-        transaction_id: nil,
-        points: 0,
-        user_id: nil
-      }])
+      expect(result).to eq([])
     end
   end
 end
