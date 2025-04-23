@@ -1,6 +1,5 @@
 # spec/services/external_transaction_service_spec.rb
 require 'rails_helper'
-require 'webmock/rspec'
 
 RSpec.describe ExternalTransactionService do
   describe ".process_transaction" do

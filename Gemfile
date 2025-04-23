@@ -44,6 +44,7 @@ end
 
 group :test do
   gem 'webmock'
+  gem 'database_cleaner-active_record'
 end
 
 group :development do
