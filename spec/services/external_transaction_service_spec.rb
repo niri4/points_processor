@@ -1,4 +1,3 @@
-# spec/services/external_transaction_service_spec.rb
 require 'rails_helper'
 
 RSpec.describe ExternalTransactionService do
