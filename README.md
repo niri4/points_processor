@@ -104,8 +104,6 @@ curl -X POST http://localhost:3000/api/v1/transactions/single   -H "Content-Type
 curl -X POST http://localhost:3000/api/v1/transactions/bulk -H "Content-Type: application/json"   -d '[{"transaction_id": "abc123", "points": 50, "user_id": "user_1"}]'
 ```
 
-> No body needed — transactions are fetched from the mocked external vendor.
-
 ---
 
 ## ✅ Running Tests
