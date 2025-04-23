@@ -14,10 +14,9 @@ class ExternalTransactionService
     response = post("/transactions/bulk_process", body: { transactions: transactions })
     return [] unless response.success?
 
-    transactios = response['transactions']
     trans = []
     transactions.each do |transaction|
-      tr = transactios.detect { |t| t["transaction_id"] == transaction[:transaction_id] }
+      tr = response.detect { |t| t["transaction_id"] == transaction[:transaction_id] }
       transaction.merge!(status: tr.present? ? :success : :failed)
       trans << transaction
     end

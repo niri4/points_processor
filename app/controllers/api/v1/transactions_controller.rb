@@ -14,13 +14,13 @@ class Api::V1::TransactionsController < ApplicationController
   def bulk
     transactions = ExternalTransactionService.bulk_process(bulk_transaction_params)
     Transaction.insert_all(transactions)
-    render json: { status: transactions_status?(transactions) ? "success" : "failed" , processed_count: transactions.size }
+    render json: { status: transactions_status?(transactions), processed_count: transactions.size }
   end
 
   private
 
   def transactions_status?(transactions)
-    transactions.any? { |trans| trans[:status] == "success" } ? "success" : "failed"
+    transactions.any? { |trans| trans["status"] == :failed } ? "failed" : "successs"
   end
 
   def transaction_params
