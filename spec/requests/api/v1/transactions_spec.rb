@@ -44,9 +44,7 @@ RSpec.describe "Transactions API", type: :request do
       ]
 
       stub_request(:post, "http://points-processor.free.beeceptor.com/transactions/bulk_process")
-        .to_return(body: {
-          transactions: transactions
-        }.to_json, headers: { 'Content-Type' => 'application/json' })
+        .to_return(body: transactions.to_json, headers: { 'Content-Type' => 'application/json' })
 
       post '/api/v1/transactions/bulk', params: { transactions: transactions }
 

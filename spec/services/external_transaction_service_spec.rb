@@ -32,11 +32,11 @@ RSpec.describe ExternalTransactionService do
   describe ".bulk_process" do
     it "returns parsed transaction data" do
       stub_request(:post, "http://points-processor.free.beeceptor.com/transactions/bulk_process")
-        .to_return(body: { transactions: [{
+        .to_return(body: [{
           transaction_id: 'abc123',
           points: 50,
           user_id: 'user_1',
-        }]}.to_json, headers: { 'Content-Type' => 'application/json' })
+        }].to_json, headers: { 'Content-Type' => 'application/json' })
 
       result = ExternalTransactionService.bulk_process([{
           transaction_id: 'abc123',
