@@ -3,6 +3,8 @@ class Api::V1::TransactionsController < ApplicationController
     transaction = Transaction.new(transaction_params)
     data = ExternalTransactionService.process_transaction(transaction_params)
     transaction.status = data["status"]
+    transaction.amount = data["amount"]
+    transaction.transaction_reference = data["transaction_reference"]
     if transaction.save
       render json: { status: transaction.status, transaction_id: transaction.transaction_id }, status: :ok
     else

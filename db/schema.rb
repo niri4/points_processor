@@ -23,6 +23,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_22_125231) do
     t.string "transaction_reference"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["transaction_id"], name: "index_transactions_on_transaction_id", unique: true
   end
 
 end
