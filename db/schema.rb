@@ -19,6 +19,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_22_125231) do
     t.integer "points", default: 0
     t.string "user_id"
     t.integer "status"
+    t.integer "amount", default: 0
+    t.string "transaction_reference"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
