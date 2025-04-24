@@ -101,7 +101,7 @@ curl -X POST http://localhost:3000/api/v1/transactions/single   -H "Content-Type
 
 **Example:**
 ```bash
-curl -X POST http://localhost:3000/api/v1/transactions/bulk -H "Content-Type: application/json"   -d '{ transactions: [{"transaction_id": "abc123", "points": 50, "user_id": "user_1"}] }'
+curl -X POST http://localhost:3000/api/v1/transactions/bulk -H "Content-Type: application/json"   -d '{ "transactions": [{"transaction_id": "abc123", "points": 50, "user_id": "user_1"},{"transaction_id": "abc12345", "points": 50, "user_id": "user_1"}, {"transaction_id": "abchelo12345", "points": 50, "user_id": "user_1"}] }'
 ```
 
 ---
